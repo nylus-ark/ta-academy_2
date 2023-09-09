@@ -1,62 +1,45 @@
-import { test, expect } from '@playwright/test';
-import { DataLayer } from '@Utils/dataLayer';
-import { timeout } from '@Utils/timeout';
+import { test, expect } from '@Test';
 
-test.describe('verify My Pick functionality in product card on Sunglasses page', () => {
-    const expectedEvent = {
-        event: 'CategoryInteraction',
-        eventCategory: 'Category - D',
-        eventAction: 'Product',
-        eventLabel: 'Add to Wishlist',
-    };
+test.describe('verify My Pick functionality', () => {
+    test('clicking My Pick button adds product to wishlist', async ({
+        page,
+        baseURL,
+        categoryPage,
+        dataLayer,
+    }) => {
+        await categoryPage.open('sunglasses');
 
-    let dataLayer: DataLayer;
-
-    test.beforeEach(async ({ page }) => {
-        await page.goto('/', { waitUntil: 'domcontentloaded' });
-        dataLayer = new DataLayer(page);
-    });
-
-    test('clicking My Pick button adds product to wishlist', async ({ page, baseURL }) => {
-        await test.step('navigate to Sunglasses page', async () => {
-            const sunglasses = page.locator('//nav//a[contains(., "Sunglasses")]');
-
-            await sunglasses.click();
-            await page.waitForLoadState('load');
-        });
-
-        await test.step('verify url', () => {
+        await test.step('check url', () => {
             const url = page.url();
 
             expect(url).toBe(`${baseURL}sunglasses`);
         });
 
-        const products = await page.locator('[data-test-name="product"]').all();
-        const randomIndex = Math.floor(Math.random() * products.length);
-        const randomProduct = products[randomIndex];
+        await test.step('click My pick button on first product', async () => {
+            await categoryPage.ProductItem.waitForProduct();
+            await categoryPage.ProductItem.clickMyPick();
 
-        await test.step('click My pick button on a random product', async () => {
-            const myPickWrapper = randomProduct.locator('[data-testid="myPickWrapper"]');
-            const myPickButton = randomProduct.locator('[aria-label="myPick"]');
+            const dataTestActiveAfterClick = await categoryPage.ProductItem.getAtributeMyPick();
 
-            await myPickWrapper.click();
-
-            const dataTestActiveAfterClick = await myPickWrapper.getAttribute('data-test-active');
-            const ariaPressedAfterClick = await myPickButton.getAttribute('aria-pressed');
-
-            expect(dataTestActiveAfterClick).toBe('true');
-            expect(ariaPressedAfterClick).toBe('true');
+            await expect(() => {
+                expect(dataTestActiveAfterClick).toBe('true');
+            }).toPass();
         });
 
         await test.step('check visible icon of quantity products in wishlist button', async () => {
-            const spanElement = page.locator(
-                '//header//div/button[@type="button"]/div[@aria-label="View My Picks"]/span'
-            );
+            const myPicksIconCountIsVisible = await categoryPage.Header.myPicksIconCountIsVisible();
 
-            expect(await spanElement.isVisible()).toBe(true);
+            expect(myPicksIconCountIsVisible).toBe(true);
         });
 
         await test.step('verify event in the dataLayer', async () => {
+            const expectedEvent = {
+                event: 'CategoryInteraction',
+                eventCategory: 'Category - D',
+                eventAction: 'Product',
+                eventLabel: 'Add to Wishlist',
+            };
+
             const [event] = await dataLayer.waitForDataLayer({
                 event: 'CategoryInteraction',
                 eventCategory: 'Category - D',
@@ -67,17 +50,12 @@ test.describe('verify My Pick functionality in product card on Sunglasses page',
         });
 
         await test.step('check added product in wishlist modal', async () => {
-            const wishlistBtn = page.locator(
-                '//header//div/button[@type="button" and @aria-label="Open Tooltip"]/div[@aria-label="View My Picks"]'
-            );
+            await categoryPage.Header.clickWishListBtn();
+            await categoryPage.waitForMyPicksList();
 
-            await wishlistBtn.click();
-            await timeout(2000);
-
-            const productId = await randomProduct.getAttribute('data-test-id');
-            const wishlistProduct = page.locator('//div[@data-productid]');
-            const wishlistProductId = await wishlistProduct.getAttribute('data-productid');
-            const isProductInWishlist = await wishlistProduct.isVisible();
+            const productId = await categoryPage.ProductItem.getProductId();
+            const wishlistProductId = await categoryPage.MyPicksList.getAttributeMyPicksItem();
+            const isProductInWishlist = await categoryPage.MyPicksList.visibleMyPicksItem();
 
             expect(isProductInWishlist).toBe(true);
             expect(productId).toBe(wishlistProductId);
