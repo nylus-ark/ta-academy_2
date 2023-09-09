@@ -3,12 +3,16 @@ import { HomePage } from '@Pages/homePage';
 import { CategoryPage } from '@Pages/categoryPage';
 import { DataLayer } from '@Utils/dataLayer';
 import { test as base, expect } from '@playwright/test';
+import { DataGenerator } from '@Utils/dataGenerate';
+import { AccountPage } from '@Pages/accountPage';
 
 type Options = {
     page: Page;
     homePage: HomePage;
     categoryPage: CategoryPage;
+    accountPage: AccountPage;
     dataLayer: DataLayer;
+    dataGenerator: DataGenerator;
 };
 
 const test = base.extend<Options>({
@@ -33,6 +37,14 @@ const test = base.extend<Options>({
 
     categoryPage: async ({ page }, use) => {
         await use(new CategoryPage(page));
+    },
+
+    accountPage: async ({ page }, use) => {
+        await use(new AccountPage(page));
+    },
+
+    dataGenerator: async ({}, use) => {
+        await use(new DataGenerator());
     },
 });
 
