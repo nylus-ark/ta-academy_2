@@ -16,4 +16,12 @@ export class CartList extends Component {
         const cartItems = await this.getCartItems();
         return cartItems.length;
     }
+
+    public async deleteAllCartItems(): Promise<void> {
+        const cartItems = await this.getCartItems();
+
+        for (const item of cartItems) {
+            await item.deleteItem();
+        }
+    }
 }
