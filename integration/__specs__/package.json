@@ -5,13 +5,14 @@
         "tslint": "yarn tsc --project ./tsconfig.json --noEmit"
     },
     "devDependencies": {
+        "@faker-js/faker": "^8.0.2",
         "@testing-library/react": "^12.1.4",
         "@types/jest": "^29.5.3",
         "@types/numeral": "0.0.28",
         "@types/react-query": "^1.1.2",
-        "dotenv": "^8.0.0",
         "@typescript-eslint/eslint-plugin": "^5.37.0",
         "@typescript-eslint/parser": "^5.37.0",
+        "dotenv": "^8.0.0",
         "eslint": "^8.23.1",
         "eslint-config-prettier": "^8.5.0",
         "eslint-import-resolver-typescript": "^3.5.1",
@@ -35,5 +36,8 @@
         "typescript": "^4.8.3",
         "wait-for-expect": "^3.0.2",
         "whatwg-fetch": "^3.6.2"
+    },
+    "dependencies": {
+        "jest-runner": "^29.6.4"
     }
 }
