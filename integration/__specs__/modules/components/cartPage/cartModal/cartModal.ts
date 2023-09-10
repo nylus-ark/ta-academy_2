@@ -11,16 +11,6 @@ export class CartModal extends Component {
         await this.element.clickByXpath(this.selectors.closeModalBtn);
     }
 
-    // public async getForm(): Promise<CartForm> {
-    //     const cartForm = this.element.querySelector(this.selectors.form);
-    //     return new CartForm(cartForm);
-    // }
-
-    // public getForm() {
-    //     const cartForm = this.element.querySelector(this.selectors.form);
-    //     return new CartForm(cartForm);
-    // }
-
     public getForm(): CartForm {
         const cartForm = this.element.querySelector(this.selectors.form);
         return new CartForm(cartForm);
