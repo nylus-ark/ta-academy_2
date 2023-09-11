@@ -7,8 +7,8 @@ export class CartItem extends Component {
         priceForOne: './/div[contains(@class, "price-for-one")]',
         addButton: './/button[text()="+"]',
         removeButton: './/button[text()="-"]',
-        name: './/h2[contains(@class, "name")]',
-        deleteButton: '//button[@data-testid="delete-btn"]',
+        name: 'h2.cart-item__name',
+        deleteButton: '[data-testid="delete-btn"]',
     };
 
     public async getPrice(): Promise<number | undefined> {
@@ -35,11 +35,11 @@ export class CartItem extends Component {
     }
 
     public async getName(): Promise<string> {
-        const [nameElement] = await this.element.waitForXpath(this.selectors.name);
+        const [nameElement] = await this.element.waitForQuerySelector(this.selectors.name);
         return String(nameElement.textContent);
     }
 
     public async deleteItem(): Promise<void> {
-        await this.element.clickByXpath(this.selectors.deleteButton);
+        await this.element.clickByCSS(this.selectors.deleteButton);
     }
 }

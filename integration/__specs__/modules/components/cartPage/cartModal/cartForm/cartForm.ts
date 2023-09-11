@@ -8,25 +8,25 @@ export class CartForm extends Component {
         submitBtn: '//button[contains (., "Create")]',
     };
 
-    public getInputName(): Component {
+    public async getInputName(): Promise<Component> {
         const inputNameElement = this.element.querySelector(this.selectors.inputName);
         return new Component(inputNameElement);
     }
 
-    public getInputPrice(): Component {
+    public async getInputPrice(): Promise<Component> {
         const inputPriceElement = this.element.querySelector(this.selectors.inputPrice);
         return new Component(inputPriceElement);
     }
 
-    public getInputQuantity(): Component {
+    public async getInputQuantity(): Promise<Component> {
         const inputQuantityElement = this.element.querySelector(this.selectors.inputQuantity);
         return new Component(inputQuantityElement);
     }
 
-    public fillForm(name: string, price: string, quantity: string): void {
-        const inputName = this.getInputName();
-        const inputPrice = this.getInputPrice();
-        const inputQuantity = this.getInputQuantity();
+    public async fillForm(name: string, price: string, quantity: string): Promise<void> {
+        const inputName = await this.getInputName();
+        const inputPrice = await this.getInputPrice();
+        const inputQuantity = await this.getInputQuantity();
 
         inputName.input(name);
         inputPrice.input(price);
