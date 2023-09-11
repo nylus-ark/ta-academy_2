@@ -7,7 +7,7 @@ export class CartModal extends Component {
     };
 
     public async getForm(): Promise<CartForm> {
-        const cartForm = this.element.querySelector(this.selectors.form);
+        const [cartForm] = await this.element.waitForQuerySelector(this.selectors.form);
         return new CartForm(cartForm);
     }
 }
