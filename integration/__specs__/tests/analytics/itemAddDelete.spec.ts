@@ -35,13 +35,13 @@ describe('Check dataLayer event on cart page', () => {
         reporter.endStep();
 
         const cartModal = await cartPage.getModal();
-        const cartForm = cartModal.getForm();
+        const cartForm = await cartModal.getForm();
 
         const productName = dataGenerate.productName;
         const productPrice = dataGenerate.productPrice;
         const productQuantity = dataGenerate.productQuantity.toString();
 
-        cartForm.fillForm(productName, productPrice, productQuantity);
+        await cartForm.fillForm(productName, productPrice, productQuantity);
         await cartForm.submitForm();
 
         reporter.startStep('Add item event');

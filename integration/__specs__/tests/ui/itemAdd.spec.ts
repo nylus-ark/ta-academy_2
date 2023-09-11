@@ -29,13 +29,13 @@ describe('Check adding a new item to cart', () => {
         await cartPage.clickAddCartItemBtn();
 
         const cartModal = await cartPage.getModal();
-        const cartForm = cartModal.getForm();
+        const cartForm = await cartModal.getForm();
 
         const productName = dataGenerate.productName;
         const productPrice = dataGenerate.productPrice;
         const productQuantity = dataGenerate.productQuantity.toString();
 
-        cartForm.fillForm(productName, productPrice, productQuantity);
+        await cartForm.fillForm(productName, productPrice, productQuantity);
         await cartForm.submitForm();
 
         const updatedCartItemsLength = await cartList.getCartItemsCount();
