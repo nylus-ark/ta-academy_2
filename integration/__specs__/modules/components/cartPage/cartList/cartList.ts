@@ -11,4 +11,9 @@ export class CartList extends Component {
         const cartItems = cartItemsElements.map(item => new CartItem(item));
         return cartItems;
     }
+
+    public async getCartItemsCount(): Promise<number> {
+        const cartItems = await this.getCartItems();
+        return cartItems.length;
+    }
 }
